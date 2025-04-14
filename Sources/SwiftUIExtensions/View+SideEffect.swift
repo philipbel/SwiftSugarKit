@@ -1,5 +1,5 @@
 //
-// errors.swift
+// View+SideEffect.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,24 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
+import os
 
 
-public struct NotFoundError: Error {
-    let message: String
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension View {
+    @available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
+    public func `do`(_ block: () -> ()) -> Self {
+        block()
+        return self
+    }  
 
-    public init(_ message: String) {
-        self.message = message
+    @available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
+    public func `do`(_ block: (Self) -> ()) -> Self {
+        block(self)
+        return self
     }
 }
 
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+#endif

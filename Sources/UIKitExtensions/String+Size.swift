@@ -1,8 +1,8 @@
 //
-// Bundle+Extensions.swift
+// String+Size.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,14 +28,15 @@
 import Foundation
 
 
-extension Bundle {
-    public var icon: PlatformImage? {
-        if let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
-           let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-           let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-           let lastIcon = iconFiles.last {
-            return PlatformImage(named: lastIcon)
-        }
-        return nil
+// From https://stackoverflow.com/a/77426150/1837715
+#if canImport(UIKit)
+import UIKit
+
+public extension String {
+    func size(in font: UIFont) -> CGSize {
+        let attributes = [ NSAttributedString.Key.font: font ]
+        return (self as NSString).size(withAttributes: attributes)
     }
 }
+
+#endif // canImport(UIKit)

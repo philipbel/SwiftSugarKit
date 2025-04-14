@@ -1,8 +1,8 @@
 //
-// Encodable+Extensions.swift
+// EdgeInsets+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,17 +25,17 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+
 import Foundation
+import SwiftUI
 
 
-extension Encodable {
-    public func encodeToJSON() throws -> [String: Any] {
-        let data = try JSONEncoder().encode(self)
-        guard let dictionary = try JSONSerialization.jsonObject(with: data,
-                                                                options: .fragmentsAllowed) as? [String: Any] else {
-            throw EncodingError.invalidValue(self,
-                                             EncodingError.Context(codingPath: [], debugDescription: "Error encoding"))
-        }
-        return dictionary
+public extension EdgeInsets {
+    init(inset: CGFloat) {
+        self.init(top: inset, leading: inset, bottom: inset, trailing: inset)
+    }
+
+    static var zero: EdgeInsets {
+        EdgeInsets(inset: 0)
     }
 }

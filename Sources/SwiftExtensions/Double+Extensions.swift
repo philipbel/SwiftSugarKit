@@ -1,5 +1,5 @@
 //
-// errors.swift
+// Double+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -24,23 +24,21 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension Double {
+    public var uInt: UInt {
+        return UInt(self)
     }
-}
 
+    public var number: NSNumber {
+        get {
+            return NSNumber(value: self)
+        }
+    }
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+    public static var random: Double {
+        .random(in: Double.leastNormalMagnitude..<Double.greatestFiniteMagnitude)
     }
 }

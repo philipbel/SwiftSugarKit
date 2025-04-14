@@ -1,8 +1,8 @@
 //
-// UInt+Extensions.swift
+// Data+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -27,36 +27,14 @@
 
 
 import Foundation
+import SwifterSwift
 
 
-extension UInt {
-    public var float: Float {
-        get {
-            return Float(self)
+public extension Data {
+    func toString(encoding: String.Encoding = .utf8) throws -> String {
+        guard let string = self.string(encoding: encoding) else {
+            throw InvalidDataError("Cannot decode data \(self) using encoding \(encoding)")
         }
-    }
-
-    public var double: Double {
-        get {
-            return Double(self)
-        }
-    }
-
-    public var cgFloat: CGFloat {
-        get {
-            return CGFloat(self.float)
-        }
-    }
-
-    public var number: NSNumber {
-        get {
-            return NSNumber(value: self)
-        }
-    }
-
-    public var int: Int {
-        get {
-            return Int(self)
-        }
+        return string
     }
 }

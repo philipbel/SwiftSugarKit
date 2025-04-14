@@ -1,8 +1,8 @@
 //
-// errors.swift
+// String+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension StaticString {
+    public var string: String {
+        return withUTF8Buffer { utf8Buffer in
+            String(decoding: utf8Buffer, as: UTF8.self)
+        }
     }
 }

@@ -1,8 +1,8 @@
 //
-// Double+Extensions.swift
+// UILabel+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -24,29 +24,18 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 //
-import Foundation
 
 
-extension Double {
-    public var uInt: UInt {
-        return UInt(self)
-    }
-
-    public var number: NSNumber {
-        get {
-            return NSNumber(value: self)
-        }
-    }
-}
+import UIKit
 
 
-// MARK: Measurement Conversions
-extension Double {
-    public var kilograms: Measurement<UnitMass> {
-        .init(value: self, unit: .kilograms)
-    }
-
-    public var pounds: Measurement<UnitMass> {
-        .init(value: self, unit: .pounds)
+extension UILabel {
+    public func makeTightSingleLine() {
+        self.numberOfLines = 1
+        self.minimumScaleFactor = 0.7
+        self.adjustsFontSizeToFitWidth = true
+        self.lineBreakMode = .byTruncatingTail
+        self.adjustsFontForContentSizeCategory = true
+        self.allowsDefaultTighteningForTruncation = true
     }
 }

@@ -2,7 +2,7 @@
 // Publisher+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -26,8 +26,9 @@
 //
 
 #if canImport(Combine)
+import Foundation
 import Combine
-#endif
+import os
 
 
 // From https://www.swiftbysundell.com/articles/calling-async-functions-within-a-combine-pipeline/
@@ -74,21 +75,20 @@ extension Publisher {
 extension Publisher {
     public func asyncMap<T>(
         _ transform: @escaping (Output) async throws -> T
-    ) -> Publishers.FlatMap<Future<T, Error>,
-                            Publishers.SetFailureType<Self, Error>> {
-                                flatMap { value in
-                                    Future { promise in
-                                        Task {
-                                            do {
-                                                let output = try await transform(value)
-                                                promise(.success(output))
-                                            } catch {
-                                                promise(.failure(error))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+    ) -> Publishers.FlatMap<Future<T, Error>, Publishers.SetFailureType<Self, Error>> {
+        flatMap { value in
+            Future { promise in
+                Task {
+                    do {
+                        let output = try await transform(value)
+                        promise(.success(output))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -145,3 +145,62 @@ extension Publisher {
             .eraseToAnyPublisher()
     }
 }
+
+
+@available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *)
+extension Publisher {
+    public func log(using logger: Logger,
+                    prefix: String,
+                    file: String = #file,
+                    line: Int = #line,
+                    function: String = #function) -> AnyPublisher<Output, Failure> {
+        return self.map { value in
+            let fileName = (file as NSString).lastPathComponent
+            logger.trace("[\(file):\(function):\(line)] \(prefix) value=\(String(describing: value))")
+            return value
+        }.eraseToAnyPublisher()
+    }
+}
+
+
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+extension Publisher {
+    public func sideEffect(_ action: @escaping (Output) -> Void) -> AnyPublisher<Output, Failure> {
+        return self
+            .map {
+                action($0)
+                return $0
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+//#if canImport(SwiftUI)
+//import SwiftUI
+//
+//@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+//extension Publisher {
+//    public func binding() -> AnyPublisher<Output, Failure> {
+//        return self
+//            .map {
+//                action($0)
+//                return $0
+//            }
+//            .eraseToAnyPublisher()
+//    }
+//}
+//
+//#endif // canImport(SwiftUI)
+
+
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+/// Inspired by https://cocoacasts.com/combine-essentials-combining-publishers-with-combine-zip-operator
+extension Publisher {
+    public func withPrevious() -> AnyPublisher<(Output, Output), Failure> {
+        Publishers.Zip(self, self.dropFirst())
+            .eraseToAnyPublisher()
+    }
+}
+
+
+#endif

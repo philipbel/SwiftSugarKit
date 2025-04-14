@@ -1,8 +1,8 @@
 //
-// errors.swift
+// LastValuePreferenceKey.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-205 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,33 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+#if canImport(SwiftUI)
+import SwiftUI
 
 
-public struct NotFoundError: Error {
-    let message: String
+/// A helper `PreferenceKey` that keeps the last non-default value.
+///
+/// Usage:
+/// ```Swift
+/// struct BottomBarSizePreferenceKey: LastValuePreferenceKey {
+///     static let defaultValue = CGSize.zero
+/// }
+/// ```
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public protocol LastValuePreferenceKey: PreferenceKey {
+}
 
-    public init(_ message: String) {
-        self.message = message
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension LastValuePreferenceKey where Value: Equatable {
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        let nextValue = nextValue()
+        if nextValue != Self.defaultValue {
+            value = nextValue
+        }
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+#endif

@@ -1,5 +1,5 @@
 //
-// errors.swift
+// PlatformImage.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,23 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if os(macOS)
+import AppKit
+public typealias PlatformColor = NSColor
+#else
+import UIKit
+public typealias PlatformColor = UIColor
+#endif
 
 
-public struct NotFoundError: Error {
-    let message: String
+#if canImport(SwiftUI)
+import SwiftUI
 
-    public init(_ message: String) {
-        self.message = message
+@available(iOS 15.0, macOS 12, tvOS 15.0, watchOS 8.0, *)
+public extension PlatformColor {
+    var color: Color {
+        Color(platformColor: self)
     }
 }
 
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+#endif // canImport(SwiftUI)

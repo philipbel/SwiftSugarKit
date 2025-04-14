@@ -1,8 +1,8 @@
 //
-// errors.swift
+// UIListContentConfiguration.TextProperties+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,20 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
 
+import UIKit
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension UIListContentConfiguration.TextProperties {
+    public func tightenedText(lines numberOfLines: Int = 1,
+                              lineBreakMode: NSLineBreakMode = .byTruncatingMiddle,
+                              minimumScaleFactor: CGFloat = 0.7) -> Self {
+        var this = self
+        this.adjustsFontSizeToFitWidth = true
+        this.allowsDefaultTighteningForTruncation = true
+        this.adjustsFontForContentSizeCategory = true
+        this.numberOfLines = numberOfLines
+        this.lineBreakMode = lineBreakMode
+        this.minimumScaleFactor = minimumScaleFactor
+        return this
     }
 }

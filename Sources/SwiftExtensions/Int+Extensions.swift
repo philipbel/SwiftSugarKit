@@ -1,8 +1,8 @@
 //
-// Bundle+Extensions.swift
+// Int+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,15 +28,17 @@
 import Foundation
 
 
-extension RandomAccessCollection {
-    public func eraseToRandomAccessCollection() -> AnyRandomAccessCollection<Element> {
-        AnyRandomAccessCollection(self)
+extension Int {
+    public var number: NSNumber {
+        get {
+            return NSNumber(value: self)
+        }
     }
 }
 
 
-extension Collection {
-    public var isNotEmpty: Bool {
-        !isEmpty
+extension Int64 {
+    public var double: Double {
+        Double(self)
     }
 }

@@ -1,5 +1,5 @@
 //
-// errors.swift
+// AnyComparable.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,41 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
 
+public struct AnyComparable: Comparable {
+    var wrappedValue: Any
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+    public static func < (lhs: AnyComparable, rhs: AnyComparable) -> Bool {
+        lessThan(lhs, rhs)
     }
-}
 
+    public static func == (lhs: AnyComparable, rhs: AnyComparable) -> Bool {
+        equals(lhs, rhs)
+    }
 
-public struct InvalidDataError: Error {
-    let message: String
+    public init<V>(_ wrappedValue: V) where V: Comparable {
+        self.wrappedValue = wrappedValue
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    public static func lessThanOrEqualTo(_ lhs: Any, _ rhs: Any) -> Bool {
+        guard let lhs = lhs as? any Comparable,
+              let rhs = rhs as? any Comparable else {
+            return false
+        }
+        return lessThan(lhs, rhs) || equals(lhs, rhs)
+    }
+
+    public static func lessThan<A, B>(_ lhs: A, _ rhs: B) -> Bool where A: Comparable, B: Comparable {
+        if let rhs = rhs as? A, lhs <= rhs {
+            return true
+        }
+        return false
+    }
+
+    public static func equals<A, B>(_ lhs: A, _ rhs: B) -> Bool where A: Comparable, B: Comparable {
+        if let rhs = rhs as? A, lhs == rhs {
+            return true
+        }
+        return false
     }
 }

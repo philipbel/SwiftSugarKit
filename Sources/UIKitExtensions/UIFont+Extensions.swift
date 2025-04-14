@@ -1,8 +1,8 @@
 //
-// RandomAccessCollection+Extensions.swift
+// UIFont+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,16 +25,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+import UIKit
 
 
-public extension RandomAccessCollection where Index == Int {
-    func elementsAt(_ offsets: IndexSet) -> Array<Element> {
-        var array = [Element]()
-        array.reserveCapacity(offsets.count)
-        for index in offsets {
-            array.append(self[index])
-        }
-        return array
+extension UIFont {
+    public var rounded: UIFont {
+        guard #available(iOS 13.0, *), let descriptor = fontDescriptor.withDesign(.rounded) else { return self }
+        return UIFont(descriptor: descriptor, size: self.pointSize)
     }
 }

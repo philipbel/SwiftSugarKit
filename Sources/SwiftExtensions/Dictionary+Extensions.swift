@@ -1,8 +1,8 @@
 //
-// Float+Extensions.swift
+// Dictionary+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,18 +28,23 @@
 import Foundation
 
 
-extension Float {
-    public var uInt: UInt {
-        return UInt(self)
-    }
-
-    public var double: Double {
-        get {
-            return Double(self)
+extension Dictionary {
+    public func value(forKey key: Key) throws -> Value {
+        guard let value = self[key] else {
+            throw NotFoundError("Key \(key) not found")
         }
+        return value
     }
 
-    public var number: NSNumber {
-        return NSNumber(value: self)
+    public mutating func get(key: Key, addingIfMissing value: Value) -> Value {
+        if let value = self[key] {
+            return value
+        }
+        self[key] = value
+        return value
+    }
+
+    public var pairs: [(key: Key, value: Value)] {
+        self.map { (key: $0, value: $1) }
     }
 }

@@ -1,8 +1,8 @@
 //
-// Int+Extensions.swift
+// Binding+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,21 +25,23 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
 
 
-extension Int {
-    public var float: Float {
-        get {
-            return Float(self)
-        }
-    }
-
-    public var number: NSNumber {
-        get {
-            return NSNumber(value: self)
-        }
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension Binding: Equatable where Value: Equatable {
+    public static func == (lhs: Binding<Value>, rhs: Binding<Value>) -> Bool {
+        lhs.wrappedValue == rhs.wrappedValue
     }
 }
 
 
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension Binding: Hashable where Value: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        wrappedValue.hash(into: &hasher)
+    }
+}
+
+#endif

@@ -1,5 +1,5 @@
 //
-// errors.swift
+// PlatformImage.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-
-
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+#if os(macOS)
+import AppKit
+public typealias PlatformImage = NSImage
+#else
+import UIKit
+public typealias PlatformImage = UIImage
+#endif

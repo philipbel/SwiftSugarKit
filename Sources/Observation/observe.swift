@@ -1,8 +1,8 @@
 //
-// PlatformImage.swift
+// observe.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,10 +25,40 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-#if os(macOS)
-import AppKit
-public typealias PlatformImage = NSImage
-#else
-import UIKit
-public typealias PlatformImage = UIImage
+#if canImport(Observation)
+import Observation
+
+
+public enum ObservationTrackingResult {
+    case `continue`
+    case `stop`
+}
+
+
+@available(iOS 17.0, macOS 14.0, tvOS 17.0, *)
+public func withContinuousObservationTracking(_ changes: @escaping () -> Void,
+                                              onChange: @escaping () async -> ObservationTrackingResult) {
+    withObservationTracking {
+        _ = changes()
+    } onChange: {
+        Task { @MainActor in
+            if await onChange() == .continue {
+                // recurse
+                withContinuousObservationTracking(changes, onChange: onChange)
+            }
+        }
+    }
+}
+
+
+@available(iOS 17.0, macOS 14.0, tvOS 17.0, *)
+public func withContinuousObservationTracking<T>(of object: T,
+                                                 keyPath: PartialKeyPath<T>,
+                                                 onChange: @escaping () async -> ObservationTrackingResult) {
+    withContinuousObservationTracking {
+        _ = object[keyPath: keyPath]
+    } onChange: {
+        return await onChange()
+    }
+}
 #endif

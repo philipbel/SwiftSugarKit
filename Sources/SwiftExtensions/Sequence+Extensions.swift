@@ -2,7 +2,7 @@
 // Sequence+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -78,6 +78,14 @@ extension Sequence {
         return filter{ x in
             x[keyPath: property].contains(substring, caseSensitive: caseSensitive)
         }
+    }  
+
+    public func filter(by property: KeyPath<Element, String>, 
+                       containsLocalizedSubstring substring: String,
+                       caseSensitive: Bool = false) -> [Element] {
+        return filter{ x in
+            x[keyPath: property].containsLocalized(substring: substring, caseSensitive: caseSensitive)
+        }
     }
 
     public func filter<T: Equatable>(by property: KeyPath<Element, T>, equalTo value: T) -> [Element] {
@@ -94,6 +102,12 @@ extension Sequence where Element == String {
             return x.contains(substring, caseSensitive: caseSensitive)
         }
     }
+
+    public func filter(stringContainsLocalizedSubstring substring: String, caseSensitive: Bool = false) -> [Element] {
+        return filter { x in
+            return x.containsLocalized(substring: substring, caseSensitive: caseSensitive)
+        }
+    }
 }
 
 
@@ -106,10 +120,39 @@ extension Sequence {
 }
 
 
+extension Sequence where Element: Hashable {
+    public var `set`: Set<Element> {
+        get {
+            Set(self)
+        }
+    }
+}
+
+
 extension Sequence {
     public func filterNonNil<T>() -> [T] where Element == Optional<T> {
         return self
             .filter { $0 != nil }
             .map { $0! }
+    }
+}
+
+
+extension Sequence {
+    public func toDictionary<K>(key keyKeyPath: KeyPath<Element, K>) -> Dictionary<K, Element> where K: Hashable {
+        let pairs = map { ($0[keyPath: keyKeyPath], $0) }
+        return Dictionary(uniqueKeysWithValues: pairs)
+    }
+
+    public func toDictionary<K, V>() -> Dictionary<K, V> where Element == (K, V), K: Hashable {
+        return Dictionary(uniqueKeysWithValues: self)
+    }
+}
+
+
+extension Sequence where Element: Identifiable {
+    public func toDictionary() -> Dictionary<Element.ID, Element> {
+        let pairs = map { ($0.id, $0) }
+        return Dictionary(uniqueKeysWithValues: pairs)
     }
 }

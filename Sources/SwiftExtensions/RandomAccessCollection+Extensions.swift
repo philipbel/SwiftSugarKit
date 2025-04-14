@@ -1,8 +1,8 @@
 //
-// Dictionary+Extensions.swift
+// RandomAccessCollection+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,19 +28,13 @@
 import Foundation
 
 
-extension Dictionary {
-    public func value(forKey key: Key) throws -> Value {
-        guard let value = self[key] else {
-            throw NotFoundError("Key \(key) not found")
+public extension RandomAccessCollection where Index == Int {
+    func elementsAt(_ offsets: IndexSet) -> Array<Element> {
+        var array = [Element]()
+        array.reserveCapacity(offsets.count)
+        for index in offsets {
+            array.append(self[index])
         }
-        return value
-    }
-
-    public mutating func get(key: Key, addingIfMissing value: Value) -> Value {
-        if let value = self[key] {
-            return value
-        }
-        self[key] = value
-        return value
+        return array
     }
 }

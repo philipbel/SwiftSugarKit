@@ -1,8 +1,8 @@
 //
-// errors.swift
+// NSLayoutConstraint+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,49 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+import UIKit
 
 
-public struct NotFoundError: Error {
-    let message: String
+extension NSLayoutConstraint {
+    @discardableResult
+    public func active(_ isActive: Bool = true) -> Self {
+        self.isActive = isActive
+        return self
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    @discardableResult
+    public func inactive() -> Self {
+        active(false)
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
+extension Array where Element == NSLayoutConstraint {
+    @discardableResult
+    public mutating func active(_ isActive: Bool = true) {
+        self = map {
+            $0.isActive = isActive
+            return $0
+        }
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    @discardableResult
+    public mutating func inactive() {
+        self = map {
+            $0.isActive = false
+            return $0
+        }
+    }
+
+    public func activated(_ isActive: Bool) -> Self {
+        map {
+            $0.isActive = isActive
+            return $0
+        }
+    }
+
+    public func deactivated() -> Self {
+        activated(false)
     }
 }

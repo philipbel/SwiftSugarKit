@@ -1,5 +1,5 @@
 //
-// errors.swift
+// GeometryProxy+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,27 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
 
 
-public struct NotFoundError: Error {
-    let message: String
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension GeometryProxy {
+    var localFrame: CGRect {
+        frame(in: .local)
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    var globalFrame: CGRect {
+        frame(in: .global)
+    }
+
+    var width: CGFloat {
+        size.width
+    }
+
+    var height: CGFloat {
+        size.height
     }
 }
 
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+#endif

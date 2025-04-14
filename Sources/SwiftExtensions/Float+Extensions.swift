@@ -1,5 +1,5 @@
 //
-// errors.swift
+// Float+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -28,19 +28,18 @@
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension Float {
+    public var uInt: UInt {
+        return UInt(self)
     }
-}
 
+//    public var double: Double {
+//        get {
+//            return Double(self)
+//        }
+//    }
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+    public var number: NSNumber {
+        return NSNumber(value: self)
     }
 }

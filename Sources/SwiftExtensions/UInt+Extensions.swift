@@ -1,5 +1,5 @@
 //
-// errors.swift
+// UInt+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,38 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension UInt {
+    public var float: Float {
+        get {
+            return Float(self)
+        }
     }
-}
 
+    public var double: Double {
+        get {
+            return Double(self)
+        }
+    }
 
-public struct InvalidDataError: Error {
-    let message: String
+    public var cgFloat: CGFloat {
+        get {
+            return CGFloat(self.float)
+        }
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    public var number: NSNumber {
+        get {
+            return NSNumber(value: self)
+        }
+    }
+
+    public var int: Int {
+        get {
+            return Int(self)
+        }
     }
 }

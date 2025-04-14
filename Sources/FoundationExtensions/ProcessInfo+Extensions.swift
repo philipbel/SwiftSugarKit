@@ -2,7 +2,7 @@
 // ProcessInfo+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -39,6 +39,25 @@ extension ProcessInfo {
         get {
             environment["XCTestConfigurationFilePath"] != nil
         }
+    }
+
+    public func environmentValue(forKey environmentKey: String, orDefault defaultValue: String) -> String {
+        ProcessInfo.processInfo.environment[environmentKey] ?? defaultValue
+    }
+
+    @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+    public func environmentValue<T, P>(forKey environmentKey: String, orDefault defaultValue: T, parser: P) -> T
+    where P: ParseStrategy,
+          P.ParseInput == String,
+          P.ParseOutput == T {
+              guard let value = ProcessInfo.processInfo.environment[environmentKey] else { return defaultValue }
+
+              do {
+                  return try parser.parse(value)
+              } catch {
+                  reportIssue("Error parsing input string '\(value)' environmentKey '\(environmentKey)'")
+                  return defaultValue
+              }
     }
 
     public func isEnabled(environment: String) -> Bool {

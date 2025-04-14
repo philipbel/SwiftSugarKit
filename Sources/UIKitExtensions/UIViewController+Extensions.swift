@@ -1,8 +1,8 @@
 //
-// errors.swift
+// UIViewController+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,22 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+import UIKit
 
 
-public struct NotFoundError: Error {
-    let message: String
+public extension UIViewController {
+    /// SwiftSugarKit: Embed a child view controller into this view controller, and set its view's
+    /// `translatesAutoresizingMaskIntoConstraints` to `false`.
+    ///
+    /// - Parameters:
+    ///   - childViewController: the child view controller to embed into this view controller.
+    ///   - containerView: the container view to which to add `childViewController`'s view, or `nil` to skip adding it
+    func embedViewController(_ childViewController: UIViewController, into containerView: UIView? = nil) {
+        childViewController.view.translatesAutoresizingMaskIntoConstraints = false
 
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+        addChild(childViewController)
+        containerView?.addSubview(childViewController.view)
+        childViewController.didMove(toParent: self)
     }
 }

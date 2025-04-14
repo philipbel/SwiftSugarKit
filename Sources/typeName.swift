@@ -1,8 +1,8 @@
 //
-// errors.swift
+// typeName.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-
-
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
+@inline(__always)
+public func typeName<T>(of value: T) -> String {
+    String(describing: T.self)
 }
 
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
+@inline(__always)
+public func typeName<T>(of type: T.Type) -> String {
+    String(describing: type)
 }

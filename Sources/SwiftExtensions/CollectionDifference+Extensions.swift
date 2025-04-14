@@ -1,8 +1,8 @@
 //
-// errors.swift
+// CollectionDifference+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,21 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
 
-
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension CollectionDifference {
+    public func mapElements<T>(_ transform: (ChangeElement) -> T) -> CollectionDifference<T>? {
+        let changes = self.map { change in
+            switch change {
+            case let .insert(offset: offset, element: element, associatedWith: associatedWith):
+                CollectionDifference<T>.Change.insert(offset: offset,
+                                                      element: transform(element),
+                                                      associatedWith: associatedWith)
+            case let .remove(offset: offset, element: element, associatedWith: associatedWith):
+                CollectionDifference<T>.Change.remove(offset: offset,
+                                                      element: transform(element),
+                                                      associatedWith: associatedWith)
+            }
+        }
+        return CollectionDifference<T>(changes)
     }
 }

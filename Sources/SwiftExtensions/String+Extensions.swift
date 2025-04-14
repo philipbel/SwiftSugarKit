@@ -2,7 +2,7 @@
 // String+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -30,9 +30,9 @@ import Foundation
 
 
 extension String {
-    public var trimmed: String {
-        trimmingCharacters(in: .whitespacesAndNewlines)
-    }
+//    public var trimmed: String {
+//        trimmingCharacters(in: .whitespacesAndNewlines)
+//    }
 
     // From https://gist.github.com/DaveWoodCom/4f751193cdb7d3767e5a
     public var isValidEmailAddress: Bool {
@@ -46,17 +46,17 @@ extension String {
             let matches = emailDetector.matches(in: self,
                                                 options: NSRegularExpression.MatchingOptions.anchored,
                                                 range: NSRange(location: 0, length: self.count))
-            guard matches.count == 1 else {
+            guard let url = matches.first?.url, matches.count == 1 else {
                 return false
             }
-            return matches[0].url?.scheme == "mailto"
+            return url.scheme == "mailto"
         }
     }
 }
 
 
 extension String {
-    public func contains(_ substring: String, caseSensitive: Bool = false) -> Bool {
+    public func contains(substring: String, caseSensitive: Bool = false) -> Bool {
         if substring.isEmpty {
             return true
         } else if isEmpty {
@@ -68,7 +68,7 @@ extension String {
         }
     }
 
-    public func containsLocalized(_ substring: String, caseSensitive: Bool = false) -> Bool {
+    public func containsLocalized(substring: String, caseSensitive: Bool = false) -> Bool {
         if substring.isEmpty {
             return true
         } else if isEmpty {
@@ -78,5 +78,12 @@ extension String {
         } else {
             return localizedCaseInsensitiveContains(substring)
         }
+    }
+}
+
+
+extension String {
+    public static var nbsp: String {
+        "\u{00A0}"
     }
 }

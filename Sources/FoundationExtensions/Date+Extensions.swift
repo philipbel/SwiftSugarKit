@@ -2,7 +2,7 @@
 // Date+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -27,20 +27,25 @@
 
 import Foundation
 
-extension Date {
-    static let GMT = TimeZone(abbreviation: "GMT")!
-    static let dateOptions: ISO8601DateFormatter.Options = [ .withYear, .withMonth, .withDay, .withDashSeparatorInDate ]
-    static let weekOptions: ISO8601DateFormatter.Options = [ .withYear, .withWeekOfYear, .withDashSeparatorInDate ]
 
-    var ISO8601DateString: String {
+extension Date {
+    public static let GMT = TimeZone(abbreviation: "GMT")!
+    public static let dateOptions: ISO8601DateFormatter.Options = [ .withYear, .withMonth, .withDay, .withDashSeparatorInDate ]
+    public static let weekOptions: ISO8601DateFormatter.Options = [ .withYear, .withWeekOfYear, .withDashSeparatorInDate ]
+
+    public var ISO8601DateString: String {
         get {
             return ISO8601DateFormatter.string(from: self, timeZone: Date.GMT, formatOptions: Date.dateOptions)
         }
     }
 
-    var ISO8601WeekString: String {
+    public var ISO8601WeekString: String {
         get {
             return ISO8601DateFormatter.string(from: self, timeZone: Date.GMT, formatOptions: Date.weekOptions)
         }
+    }
+
+    public static var random: Date {
+        Date.random(in: Date.distantPast..<Date.distantFuture)
     }
 }

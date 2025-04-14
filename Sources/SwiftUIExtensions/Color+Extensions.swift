@@ -1,8 +1,8 @@
 //
-// errors.swift
+// Color+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,55 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
 
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension Color {
+    @available(iOS 15.0, macOS 12, tvOS 15.0, watchOS 8.0, *)
+    public init(platformColor: PlatformColor) {
+#if os(macOS)
+        self.init(nsColor: platformColor)
+#else
+        self.init(uiColor: platformColor)
+#endif
+    }
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+    @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
+    public var platformColor: PlatformColor {
+        get {
+            PlatformColor(self)
+        }
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
+//@available(iOS 15.0, macOS 12, tvOS 15.0, watchOS 8.0, *)
+//public protocol ColorConvertible {
+//    var color: Color { get }
+//}
+//
+//@available(iOS 15.0, macOS 12, tvOS 15.0, watchOS 8.0, *)
+//public extension ColorConvertible where Self == PlatformColor {
+//    var color: Color {
+//        Color(platformColor: self)
+//    }
+//}
 
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+
+//#if os(macOS)
+//import AppKit
+//
+//extension NSColor: ColorConvertible { }
+//
+//#else
+//
+//import UIKit
+//
+//extension UIColor: ColorConvertible { }
+//
+//#endif
+
+
+
+#endif // canImport(SwiftUI)

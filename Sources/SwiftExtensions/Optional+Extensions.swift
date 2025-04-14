@@ -1,8 +1,8 @@
 //
-// Array+Extensions.swift
+// Optional+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,50 +28,58 @@
 import Foundation
 
 
-extension Array {
-    public subscript(index: Int, default defaultValue: @autoclosure () -> Element) -> Element {
-        guard index >= 0, index < endIndex else {
-            return defaultValue()
+extension Optional: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .none:
+            return "\(typeName(of: self))(nil)"
+        case .some(let wrapped):
+            return String(describing: wrapped)
         }
-
-        return self[index]
-    }
-
-    public func element(index: Int) throws -> Element {
-        guard index >= 0, index < endIndex else {
-            throw NotFoundError("Index \(index) is out of bounds [0, \(endIndex)]")
-        }
-        return self[index]
-    }
-
-    public func elementOrNil(index: Int) -> Element? {
-        guard index >= 0, index < endIndex else {
-            return nil
-        }
-        return self[index]
-    }
-
-    public func elementOrNil<Wrapped>(index: Int) -> Wrapped? where Element == Optional<Wrapped> {
-        guard index >= 0, index < endIndex else {
-            return nil
-        }
-        return self[index]
     }
 }
 
 
-extension Array {
-    public func appending(_ element: Element) -> Self {
-        var newArray = self
-        newArray.append(element)
-        return newArray
+extension Optional {
+    public func unwrapped(orReplaceNilWith function: () -> Wrapped) -> Wrapped {
+        switch self {
+        case let .some(wrapped):
+            wrapped
+        case .none:
+            function()
+        }
+
     }
 }
 
-extension Array where Element: Hashable {
-    public var `set`: Set<Element> {
-        get {
-            Set(self)
+
+extension Optional {
+    public func unwrappedOrThrow(_ error: Error) throws -> Wrapped {
+        if case let .some(wrapped) = self {
+            return wrapped
+        }
+        throw error
+    }
+}
+
+/**
+ * Swift 5
+ * See https://stackoverflow.com/questions/42543007/how-to-solve-string-interpolation-produces-a-debug-description-for-an-optional
+ */
+extension DefaultStringInterpolation {
+    public mutating func appendInterpolation<T>(_ optional: T?) {
+        appendInterpolation(String(describing: optional))
+    }
+}
+
+
+extension Optional {
+    public func `as`<T>(_ type: T.Type) -> T? {
+        switch self {
+        case .none:
+            nil
+        case .some(let wrapped):
+            wrapped as? T
         }
     }
 }

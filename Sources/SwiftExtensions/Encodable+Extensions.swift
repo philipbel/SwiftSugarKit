@@ -1,5 +1,5 @@
 //
-// errors.swift
+// Encodable+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -28,19 +28,14 @@
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-}
-
-
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension Encodable {
+    public func encodeToJSON() throws -> [String: Any] {
+        let data = try JSONEncoder().encode(self)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data,
+                                                                options: .fragmentsAllowed) as? [String: Any] else {
+            throw EncodingError.invalidValue(self,
+                                             EncodingError.Context(codingPath: [], debugDescription: "Error encoding"))
+        }
+        return dictionary
     }
 }

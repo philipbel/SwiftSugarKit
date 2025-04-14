@@ -1,8 +1,8 @@
 //
-// errors.swift
+// UIView+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,23 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+import UIKit
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension UIView {
+    public func addConstrainedSubviews(_ subviews: UIView...) {
+        subviews.forEach {
+            addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension UIView {
+    public func layerBorder(color: UIColor = .random, width: CGFloat = 1) {
+        layerBorderColor = color
+        layerBorderWidth = width
     }
 }

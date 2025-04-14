@@ -1,8 +1,8 @@
 //
-// errors.swift
+// ObservableObject+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,38 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
+
+import Combine
 
 
-public struct NotFoundError: Error {
-    let message: String
 
-    public init(_ message: String) {
-        self.message = message
+@MainActor
+public protocol PropertyBindingSupporting {
+    func binding<T>(to keyPath: ReferenceWritableKeyPath<Self, T>) -> Binding<T>
+}
+
+extension PropertyBindingSupporting {
+    public func binding<T>(to keyPath: ReferenceWritableKeyPath<Self, T>) -> Binding<T> {
+        Binding {
+            self[keyPath: keyPath]
+        } set: {
+            self[keyPath: keyPath] = $0
+        }
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension ObservableObject {
+    public func binding<T>(to keyPath: ReferenceWritableKeyPath<Self, T>) -> Binding<T> {
+        Binding {
+            self[keyPath: keyPath]
+        } set: {
+            self[keyPath: keyPath] = $0
+        }
     }
 }
+
+
+#endif // canImport(SwiftUI)

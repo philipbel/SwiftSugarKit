@@ -1,5 +1,5 @@
 //
-// errors.swift
+// Collections+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -26,21 +26,29 @@
 //
 
 import Foundation
+import SwifterSwift
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension RandomAccessCollection {
+    public func eraseToRandomAccessCollection() -> AnyRandomAccessCollection<Element> {
+        AnyRandomAccessCollection(self)
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
+extension Collection {
+    public var isNotEmpty: Bool {
+        !isEmpty
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    /// Safely get the element at `index`, wrapping around the size of the collection
+    public subscript(safeWrapping index: Index) -> Element? {
+        guard isNotEmpty else { return nil }
+
+        let i = distance(from: self.startIndex, to: index)
+        let clampedIndex = i % self.count
+        let targetIndex = self.index(self.startIndex, offsetBy: clampedIndex)
+
+        return self[targetIndex]
     }
 }

@@ -1,5 +1,5 @@
 //
-// errors.swift
+// CGSize+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,39 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+import CoreGraphics
 
 
-public struct NotFoundError: Error {
-    let message: String
+public extension CGSize {
+    public static let infinity = CGSize(width: CGFloat.infinity, height: CGFloat.infinity)
 
-    public init(_ message: String) {
-        self.message = message
+    public static func - (lhs: CGSize, value: CGFloat) -> CGSize {
+        return CGSize(width: lhs.width - value, height: lhs.height - value)
+    }
+
+    public init(square side: CGFloat) {
+        self.init(width: side, height: side)
+    }
+
+}
+
+
+extension CGSize: CustomStringConvertible {
+    public var description: String {
+        "CGSize(\(width), \(height))"
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
+extension CGPoint: CustomStringConvertible {
+    public var description: String {
+        "CGPoint(\(x), \(y))"
+    }
+}
 
-    public init(_ message: String) {
-        self.message = message
+
+extension CGRect: CustomStringConvertible {
+    public var description: String {
+        "CGRect(origin=\(origin), size=\(size))"
     }
 }

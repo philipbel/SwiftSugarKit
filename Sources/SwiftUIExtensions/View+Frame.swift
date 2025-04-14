@@ -1,5 +1,5 @@
 //
-// errors.swift
+// View+Frame.swift
 // This file is part of SwiftSugarKit.
 //
 // Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
@@ -25,22 +25,30 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+import SwiftUI
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension View {
+    public func frame(size: CGSize, alignment: Alignment = .center) -> some View {
+        return self
+            .frame(width: size.width, height: size.height, alignment: alignment)
     }
-}
 
+    public func frame(minSize: CGSize, alignment: Alignment = .center) -> some View {
+        return self
+            .frame(minWidth: minSize.width, minHeight: minSize.height, alignment: alignment)
+    }
 
-public struct InvalidDataError: Error {
-    let message: String
+    public func frame(maxSize: CGSize, alignment: Alignment = .center) -> some View {
+        return self
+            .frame(maxWidth: maxSize.width, maxHeight: maxSize.height, alignment: alignment)
+    }
 
-    public init(_ message: String) {
-        self.message = message
+    public func frame(minSize: CGSize, maxSize: CGSize, alignment: Alignment = .center) -> some View {
+        return self
+            .frame(minWidth: minSize.width, maxWidth: maxSize.width,
+                   minHeight: minSize.height, maxHeight: maxSize.height,
+                   alignment: alignment)
     }
 }

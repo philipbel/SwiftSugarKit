@@ -1,8 +1,8 @@
 //
-// errors.swift
+// UIView+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,22 +25,25 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+
+import UIKit
 
 
-public struct NotFoundError: Error {
-    let message: String
+extension UIImage {
+    // From https://stackoverflow.com/a/55339365/1837715
+    public static func fromString(_ string: String, font: UIFont = .preferredFont(forTextStyle: .body)) -> UIImage {
+        let nsString = (string as NSString)
+        let stringAttributes = [NSAttributedString.Key.font: font]
+        let imageSize = nsString.size(withAttributes: stringAttributes)
 
-    public init(_ message: String) {
-        self.message = message
-    }
-}
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
+        defer { UIGraphicsEndImageContext() }
+        UIColor.clear.set() // clear background
+        UIRectFill(CGRect(origin: CGPoint(), size: imageSize))
+        nsString.draw(at: CGPoint.zero, withAttributes: stringAttributes)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
 
+        return image ?? UIImage()
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
     }
 }

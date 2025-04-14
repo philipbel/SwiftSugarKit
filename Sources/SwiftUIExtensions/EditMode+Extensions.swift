@@ -1,8 +1,8 @@
 //
-// Optional+Extensions.swift
+// EditMode+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -25,37 +25,32 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
+#if canImport(SwiftUI)
+import SwiftUI
 
-
-extension Optional: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .none:
-            let typeString = String(describing: type(of: Wrapped.self))
-            return "\(typeString)(nil)"
-        case .some(let wrapped):
-            return String(describing: wrapped)
+extension Binding where Value == EditMode {
+    public func toggle() {
+        if wrappedValue.isEditing {
+            wrappedValue = .inactive
+        } else {
+            wrappedValue = .active
         }
     }
-}
 
-extension Optional {
-    public func unwrappedOrThrow(_ error: Error) throws -> Wrapped {
-        if case let .some(wrapped) = self {
-            return wrapped
-        }
-        throw error
+    public var isEditing: Bool {
+        wrappedValue.isEditing
     }
 }
 
-/**
- * Swift 5
- * See https://stackoverflow.com/questions/42543007/how-to-solve-string-interpolation-produces-a-debug-description-for-an-optional
- */
-extension DefaultStringInterpolation {
-    public mutating func appendInterpolation<T>(_ optional: T?) {
-        appendInterpolation(String(describing: optional))
+
+extension Optional where Wrapped == Binding<EditMode> {
+    public var isEditing: Bool {
+        self?.isEditing == true
+    }
+
+    public func toggle() {
+        self?.toggle()
     }
 }
 
+#endif

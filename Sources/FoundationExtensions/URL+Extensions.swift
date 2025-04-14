@@ -1,8 +1,8 @@
 //
-// errors.swift
+// URL+Extensions.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2024-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -28,19 +28,16 @@
 import Foundation
 
 
-public struct NotFoundError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension URL {
+    /// Given an URL like `scheme://host/path/file.ext`, returns `file`.
+    public var basenameWithoutExtension: String {
+        deletingPathExtension().lastPathComponent
     }
 }
 
 
-public struct InvalidDataError: Error {
-    let message: String
-
-    public init(_ message: String) {
-        self.message = message
+extension URL: Identifiable {
+    public var id: String {
+        absoluteString
     }
 }
