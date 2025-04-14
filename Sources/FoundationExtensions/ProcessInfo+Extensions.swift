@@ -26,7 +26,7 @@
 //
 
 import Foundation
-
+import IssueReporting
 
 extension ProcessInfo {
     public var isSwiftUIPreview: Bool {

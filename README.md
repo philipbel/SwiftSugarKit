@@ -1,6 +1,6 @@
 [//]: # "README.md"
 [//]: # "This file is part of SwiftSugarKit."
-[//]: # "Copyright © 2023 Philip B. (@philipbel). All rights reserved."
+[//]: # "Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved."
 [//]: # "https://github.com/philipbel/SwiftSugarKit"
 
 # Package
@@ -13,7 +13,7 @@ collection of Swift utilities that make Swift even sweeter.
 
 This package is licensed under the MIT License.
 
-> Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+> Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 >
 > https://github.com/philipbel/SwiftSugarKit
 >

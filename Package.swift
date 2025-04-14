@@ -4,7 +4,7 @@
 // Package.swift
 // This file is part of SwiftSugarKit.
 //
-// Copyright © 2023 Philip B. (@philipbel). All rights reserved.
+// Copyright © 2023-2025 Philip B. (@philipbel). All rights reserved.
 //
 // https://github.com/philipbel/SwiftSugarKit
 //
@@ -31,12 +31,21 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftSugarKit",
+    platforms: [ .macOS(.v11), .iOS(.v14), .watchOS(.v7), .tvOS(.v14) ],
     products: [
         .library(name: "SwiftSugarKit",
                  targets: ["SwiftSugarKit"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "7.0.0"),
+         .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "1.5.2"),
+    ],
     targets: [
         .target(name: "SwiftSugarKit",
+                dependencies: [
+                    "SwifterSwift",
+                    .product(name: "IssueReporting", package: "xctest-dynamic-overlay"),
+                ],
                 path: "Sources"),
         .testTarget(name: "SwiftSugarKitTests",
                     dependencies: ["SwiftSugarKit"],
